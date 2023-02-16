@@ -1,18 +1,9 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
-  <header>
-    <div class="wrapper">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="container">
+    <RouterView />
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
+<script>
+</script>
