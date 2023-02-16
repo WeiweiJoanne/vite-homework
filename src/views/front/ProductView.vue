@@ -50,7 +50,6 @@ export default {
       fullPage: true,
       temProduct: {},
       qty: 1,
-      // carts: [],
     };
   },
   mounted() {
@@ -78,7 +77,7 @@ export default {
           if (res.data.success) {
             // this.getCart();
             alert("加入購物車成功");
-            this.qty = 1
+            this.qty = 1;
           } else {
             alert("加入購物車失敗");
           }
@@ -86,15 +85,6 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    // getCart() {
-    //   this.$http
-    //     .get(`${VITE_API}api/${VITE_APIPATH}/cart`)
-    //     .then((res) => {
-    //       const data = res.data.data.carts;
-    //       // this.carts = data;
-    //     })
-    //     .catch((err) => console.log(err));
-    // },
   },
 };
 </script>
