@@ -43,9 +43,7 @@ export default {
     this.$http
       .get(`${VITE_API}api/${VITE_APIPATH}/products/all`)
       .then((res) => {
-        console.log(res);
         this.products = Object.values(res.data.products);
-        // this.pagination = res.data.pagination
         this.isLoading = false;
       })
       .catch((err) => console.log(err));
