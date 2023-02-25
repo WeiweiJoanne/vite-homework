@@ -199,6 +199,40 @@
         </div>
       </div>
     </div>
+    <div class="modal-dialog" role="document" v-show="modalFor == 'del'">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <h5 class="modal-title text-center" id="exampleModalLabel">
+            確定要刪除 {{ modalData.title }} 嗎?
+          </h5>
+          <div class="d-flex justify-content-center my-4">
+            <button
+              type="button"
+              class="btn btn-outline-danger mx-2"
+              @click="excute"
+            >
+              確定刪除
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary mx-2"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              取消
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
