@@ -1,8 +1,6 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 
-import "bootstrap";
-
 import axios from "axios";
 import VueAxios from "vue-axios";
 
