@@ -37,7 +37,7 @@ export default {
   props: ["pagination", "getProductAll"],
   methods: {
     goTopage(action, num = null) {
-      this.$emit("initIsActive");
+      this.$emit("initIsActive",null);
       if (action !== "num" && num === null) {
         action === "next"
           ? this.getProductAll(this.pagination.current_page + 1)

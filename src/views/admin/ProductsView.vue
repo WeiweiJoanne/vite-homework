@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <VueLoading
@@ -133,6 +132,13 @@
         </table>
         <p>目前有 {{ products.length }} 項產品</p>
 
+        <ProductModal
+          :modal-for="modalFor"
+          :product-temp="productTemp"
+          :get-product-all="getProductAll"
+          :pagination="pagination"
+          ref="productModal"
+        ></ProductModal>
         <Pagination
           :pagination="pagination"
           :get-product-all="getProductAll"
@@ -145,6 +151,7 @@
 
 <script>
 import Pagination from "../../components/PaginationItem.vue";
+import ProductModal from "../../components/ProductModal.vue";
 const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 export default {
@@ -154,9 +161,8 @@ export default {
       isActive: null,
       isLoading: true,
       fullPage: true,
-      // modalFor: null,
-      // insertImgBtn: "insert",
-      // productTemp: {},
+      modalFor: null,
+      productTemp: {},
       pagination: {},
     };
   },
@@ -165,8 +171,32 @@ export default {
     this.getProductAll();
   },
   methods: {
-    toInitIsActive() {
-      this.isActive = null;
+    openModal(todo, id) {
+      this.modalFor = todo;
+      if (todo == "new") {
+        this.productTemp = {};
+      } else if (todo == "edit") {
+        this.products.forEach((el, i) => {
+          if (el.id === id) {
+            this.productTemp = JSON.parse(JSON.stringify(this.products[i]));
+          }
+        });
+      } else {
+        this.products.forEach((el, i) => {
+          if (el.id === id) {
+            this.productTemp = JSON.parse(JSON.stringify(this.products[i]));
+            // this.productTemp = { ...this.products[i] };
+          }
+        });
+      }
+
+      console.log(this.$refs.productModal);
+      this.$refs.productModal.open();
+
+      // productModal.show();
+    },
+    toInitIsActive(val) {
+      this.isActive = val;
     },
     getProductAll(page = 1) {
       this.isLoading = true;
@@ -200,6 +230,6 @@ export default {
         });
     },
   },
-  components: { Pagination },
+  components: { Pagination, ProductModal },
 };
 </script>
