@@ -1,9 +1,6 @@
 <template>
-  <div class="container">
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <style scoped></style>
-<script>
-</script>
+<script></script>

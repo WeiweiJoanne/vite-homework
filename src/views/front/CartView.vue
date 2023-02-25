@@ -126,7 +126,7 @@ import AllRules from "@vee-validate/rules";
 import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
 
-const { VITE_API, VITE_APIPATH } = import.meta.env;
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 // zh_TW
 // import { required, email, min } from '@vee-validate/rules';
 // defineRule('required', required);
@@ -160,7 +160,7 @@ export default {
   methods: {
     getCart() {
       this.$http
-        .get(`${VITE_API}api/${VITE_APIPATH}/cart`)
+        .get(`${VITE_API}api/${VITE_API_PATH}/cart`)
         .then((res) => {
           const data = res.data.data.carts;
           this.carts = data;
@@ -183,7 +183,7 @@ export default {
         if (this.carts.length > 0) {
           this.isLoading = true;
           this.$http
-            .delete(`${VITE_API}api/${VITE_APIPATH}/carts`)
+            .delete(`${VITE_API}api/${VITE_API_PATH}/carts`)
             .then((res) => {
               if (res.data.success) {
                 alert(res.data.message);
@@ -200,7 +200,7 @@ export default {
       } else {
         this.isLoading = true;
         this.$http
-          .delete(`${VITE_API}api/${VITE_APIPATH}/cart/${id}`)
+          .delete(`${VITE_API}api/${VITE_API_PATH}/cart/${id}`)
           .then((res) => {
             if (res.data.success) {
               alert(res.data.message);

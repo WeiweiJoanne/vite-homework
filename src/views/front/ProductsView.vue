@@ -30,7 +30,7 @@
 </template>
 
 <script>
-const { VITE_API, VITE_APIPATH } = import.meta.env;
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 export default {
   data() {
     return {
@@ -41,7 +41,7 @@ export default {
   },
   mounted() {
     this.$http
-      .get(`${VITE_API}api/${VITE_APIPATH}/products/all`)
+      .get(`${VITE_API}api/${VITE_API_PATH}/products/all`)
       .then((res) => {
         this.products = Object.values(res.data.products);
         this.isLoading = false;

@@ -1,12 +1,12 @@
 <template>
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end">
-      <li :class="page - item">
+      <li class="page-item">
         <a
           :class="['page-link', { disabled: !pagination.has_pre }]"
           href="#"
           aria-label="Previous"
-          @click="goTopage('prev')"
+          @click.prevent="goTopage('prev')"
         >
           <span aria-hidden="true">&laquo;</span>
         </a>
@@ -15,7 +15,7 @@
         <a
           :class="['page-link', { active: page == pagination.current_page }]"
           href="#"
-          @click="goTopage('num', page)"
+          @click.prevent="goTopage('num', page)"
           >{{ page }}</a
         >
       </li>
@@ -24,7 +24,7 @@
           :class="['page-link', { disabled: !pagination.has_next }]"
           href="#"
           aria-label="Next"
-          @click="goTopage('next')"
+          @click.prevent="goTopage('next')"
         >
           <span aria-hidden="true">&raquo;</span>
         </a>
@@ -37,6 +37,7 @@ export default {
   props: ["pagination", "getProductAll"],
   methods: {
     goTopage(action, num = null) {
+      this.$emit("initIsActive");
       if (action !== "num" && num === null) {
         action === "next"
           ? this.getProductAll(this.pagination.current_page + 1)

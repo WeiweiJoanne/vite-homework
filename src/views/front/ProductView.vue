@@ -42,7 +42,7 @@
 </template>
 
 <script>
-const { VITE_API, VITE_APIPATH } = import.meta.env;
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 export default {
   data() {
     return {
@@ -55,7 +55,7 @@ export default {
   mounted() {
     this.isLoading = true;
     const id = this.$route.params.id;
-    this.$http(`${VITE_API}api/${VITE_APIPATH}/product/${id}`)
+    this.$http(`${VITE_API}api/${VITE_API_PATH}/product/${id}`)
       .then((res) => {
         this.temProduct = res.data.product;
         this.isLoading = false;
@@ -72,10 +72,9 @@ export default {
         },
       };
       this.$http
-        .post(`${VITE_API}api/${VITE_APIPATH}/cart`, data)
+        .post(`${VITE_API}api/${VITE_API_PATH}/cart`, data)
         .then((res) => {
           if (res.data.success) {
-            // this.getCart();
             alert("加入購物車成功");
             this.qty = 1;
           } else {

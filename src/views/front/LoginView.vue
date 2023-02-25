@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-const { VITE_API, VITE_APIPATH } = import.meta.env;
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 export default {
   data() {
     return {
