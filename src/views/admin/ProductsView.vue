@@ -150,9 +150,9 @@
 </template>
 
 <script>
+const { VITE_API, VITE_API_PATH } = import.meta.env;
 import Pagination from "../../components/PaginationItem.vue";
 import ProductModal from "../../components/ProductModal.vue";
-const { VITE_API, VITE_API_PATH } = import.meta.env;
 
 export default {
   data() {

@@ -44,22 +44,26 @@
           </tr>
         </tbody>
       </table>
-      <v-form ref="form" class="mt-5" v-slot="{ errors }" @submit="onSubmit">
+      <VueForm ref="form" class="mt-5" v-slot="{ errors }" @submit="onSubmit">
         <div class="form-floating mb-3">
-          <v-field
+          <VueField
             id="username"
-            name="姓名"
+            name="account"
+            label="姓名"
             type="username"
             :class="['form-control', { 'is-invalid': errors['姓名'] }]"
             placeholder="請輸入 username"
             rules="required"
-            v-model="user.username"
-          ></v-field>
+            v-model="user.name"
+          ></VueField>
           <label for="username-input">Name</label>
-          <error-message name="姓名" class="invalid-feedback"></error-message>
+          <error-message
+            name="account"
+            class="invalid-feedback"
+          ></error-message>
         </div>
         <div class="form-floating mb-3">
-          <v-field
+          <VueField
             id="email"
             name="Email"
             type="email"
@@ -67,35 +71,40 @@
             placeholder="請輸入 Email"
             rules="email|required"
             v-model="user.email"
-          ></v-field>
+          ></VueField>
           <label for="email-input">Email</label>
           <error-message name="Email" class="invalid-feedback"></error-message>
         </div>
         <div class="form-floating mb-3">
-          <v-field
+          <VueField
             id="telphone"
-            name="電話"
+            name="tel"
+            label="電話"
             type="tel"
             :class="['form-control', { 'is-invalid': errors['電話'] }]"
             placeholder="請輸入 telphone"
             rules="min: 8|numeric|required"
-            v-model="user.telphone"
-          ></v-field>
+            v-model="user.tel"
+          ></VueField>
           <label for="telphone-input">Telphone</label>
-          <error-message name="電話" class="invalid-feedback"></error-message>
+          <error-message name="tel" class="invalid-feedback"></error-message>
         </div>
         <div class="form-floating mb-3">
-          <v-field
+          <VueField
             id="address"
-            name="地址"
+            name="address"
+            label="地址"
             type="tel"
             :class="['form-control', { 'is-invalid': errors['地址'] }]"
             placeholder="請輸入 address"
             rules="min: 8|required"
             v-model="user.address"
-          ></v-field>
+          ></VueField>
           <label for="address-input">Address</label>
-          <error-message name="地址" class="invalid-feedback"></error-message>
+          <error-message
+            name="address"
+            class="invalid-feedback"
+          ></error-message>
         </div>
         <div class="form-floating mb-3">
           <textarea
@@ -105,7 +114,7 @@
             type="text"
             class="form-control"
             placeholder="請輸入 message"
-            v-model="user.message"
+            v-model="message"
           ></textarea>
           <label for="message-input">Message</label>
           <error-message
@@ -116,38 +125,18 @@
         <div class="text-end d-grid">
           <button class="btn btn-primary" type="submit">送出</button>
         </div>
-      </v-form>
+      </VueForm>
     </div>
   </div>
 </template>
 <script>
-import { Form, Field, ErrorMessage, defineRule, configure } from "vee-validate";
-import AllRules from "@vee-validate/rules";
-import { localize, setLocale } from "@vee-validate/i18n";
-import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
-
 const { VITE_API, VITE_API_PATH } = import.meta.env;
-// zh_TW
-// import { required, email, min } from '@vee-validate/rules';
-// defineRule('required', required);
-// defineRule('email', email);
-// defineRule('min', min);
-Object.keys(AllRules).forEach((rule) => {
-  defineRule(rule, AllRules[rule]);
-});
-
-configure({
-  generateMessage: localize({ zh_TW: zhTW }),
-  validateOnInput: true,
-});
-
-// 設定預設語系
-setLocale("zh_TW");
 
 export default {
   data() {
     return {
       user: {},
+      message: "",
       isLoading: true,
       fullPage: true,
       carts: [],
@@ -170,7 +159,21 @@ export default {
     },
     onSubmit() {
       if (this.carts.length > 0) {
+        // /v2/api/{api_path}/order
+        const data = {
+          data: {
+            user: this.user,
+            message: this.message,
+          },
+        };
+        this.$http
+          .post(`${VITE_API}api/${VITE_API_PATH}/order`, data)
+          .then((res) => {
+            console.log(res);
+          });
+        console.log(data);
         alert("建立訂單");
+
         this.$refs.form.resetForm();
         this.user = {};
         this.carts = [];
@@ -222,11 +225,6 @@ export default {
       });
       return total;
     },
-  },
-  components: {
-    VForm: Form,
-    VField: Field,
-    ErrorMessage,
   },
 };
 </script>
