@@ -1,5 +1,10 @@
 <template>
   <VueLoading :active="isLoading" :is-full-page="fullPage"></VueLoading>
+  <div class="text-end">
+    <button class="btn btn-danger btn-sm" type="button" @click="delAll">
+      刪除全部訂單
+    </button>
+  </div>
   <table class="table mt-4">
     <thead>
       <tr>
@@ -45,14 +50,14 @@
               <button
                 class="btn btn-outline-primary btn-sm"
                 type="button"
-                @click="openModal(item)"
+                @click="openModal('view', item)"
               >
                 檢視
               </button>
               <button
                 class="btn btn-outline-danger btn-sm"
                 type="button"
-                @click="openDelOrderModal(item)"
+                @click="openModal('del', item)"
               >
                 刪除
               </button>
@@ -68,16 +73,20 @@
     @update-paid="updatePaid"
   ></OrderModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal> -->
-  <Pagination
-    :pagination="pagination"
-    :get-product-all="getProductAll"
-  ></Pagination>
+  <OrdersModal
+    ref="orderTemp"
+    :modal-for="modalFor"
+    :order-temp="orderTemp"
+    :get-orders-all="getOrdersAll"
+  ></OrdersModal>
+  <Pagination :pagination="pagination" :get-orders-all="getOrdersAll"></Pagination>
 </template>
 
 <script>
 // const { VITE_API, VITE_API_PATH } = import.meta.env;
 import { inject } from "vue";
 import Pagination from "../../components/PaginationItem.vue";
+import OrdersModal from "../../components/ordersModal.vue";
 
 export default {
   data() {
@@ -87,21 +96,61 @@ export default {
       fullPage: true,
       pagination: {},
       orders: [],
+      modalFor: null,
+      orderTemp: {},
     };
   },
   inject: ["VITE_API", "VITE_API_PATH", "filterDate"],
   mounted() {
     this.isLogin();
     // /v2/api/{api_path}/admin/orders
-    this.$http(`${this.VITE_API}api/${this.VITE_API_PATH}/admin/orders`).then(
-      (res) => {
-        const data = res.data.orders;
-        this.orders = data;
-        this.isLoading = false;
-      }
-    );
+    this.getOrdersAll();
   },
   methods: {
+    openModal(todo, item) {
+      this.modalFor = todo;
+      this.orderTemp = item;
+      this.$refs.orderTemp.open();
+    },
+    delAll() {
+      this.isLoading = true;
+      // /v2/api/{api_path}/admin/order/{id}
+      this.$http["delete"](
+        `${this.VITE_API}api/${this.VITE_API_PATH}/admin/orders/all`
+      )
+        .then((res) => {
+          if (res.data.success) {
+            alert(res.data.message);
+            this.getOrdersAll();
+          }
+          this.isLoading = false;
+        })
+        .catch((err) => console.log(err));
+    },
+    updatePaid(item) {
+      this.isLoading = true;
+      // /v2/api/{api_path}/admin/order/{id}
+      const id = item.id;
+      const data = {
+        data: {
+          paid_date: item.is_paid ? parseInt(Date.now() / 1000): null,
+          is_paid: item.is_paid,
+        },
+      };
+      console.log(data);
+      this.$http["put"](
+        `${this.VITE_API}api/${this.VITE_API_PATH}/admin/order/${id}`,
+        data
+      )
+        .then((res) => {
+          if (res.data.success) {
+            alert(res.data.message);
+            this.getOrdersAll()
+          }
+          this.isLoading = false;
+        })
+        .catch((err) => console.log(err));
+    },
     isLogin() {
       const token = document.cookie.replace(
         /(?:(?:^|.*;\s*)petsHome\s*\=\s*([^;]*).*$)|^.*$/,
@@ -118,19 +167,19 @@ export default {
           this.$router.push("/login");
         });
     },
-    getProductAll(page = 1) {
+    getOrdersAll() {
       this.isLoading = true;
-      const getProductsAPI = `${this.VITE_API}api/${this.VITE_API_PATH}/admin/products/?page=${page}`;
-      this.$http
-        .get(getProductsAPI)
-        .then((res) => {
-          this.products = Object.values(res.data.products);
-          this.pagination = res.data.pagination;
+      // /v2/api/{api_path}/admin/orders
+      this.$http(`${this.VITE_API}api/${this.VITE_API_PATH}/admin/orders`).then(
+        (res) => {
+          const data = res.data.orders;
+          this.orders = data;
           this.isLoading = false;
-        })
-        .catch((err) => console.log(err));
+          this.pagination = res.data.pagination
+        }
+      );
     },
   },
-  components: { Pagination },
+  components: { Pagination, OrdersModal },
 };
 </script>

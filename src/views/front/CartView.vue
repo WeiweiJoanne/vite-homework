@@ -169,14 +169,12 @@ export default {
         this.$http
           .post(`${VITE_API}api/${VITE_API_PATH}/order`, data)
           .then((res) => {
-            console.log(res);
+            alert("建立訂單");
+            this.$refs.form.resetForm();
+            this.user = {};
+            this.carts = [];
           });
-        console.log(data);
-        alert("建立訂單");
 
-        this.$refs.form.resetForm();
-        this.user = {};
-        this.carts = [];
       } else {
         alert("請選購商品後再結帳");
       }
