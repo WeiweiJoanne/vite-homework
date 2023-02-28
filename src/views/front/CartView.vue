@@ -47,18 +47,18 @@
       <VueForm ref="form" class="mt-5" v-slot="{ errors }" @submit="onSubmit">
         <div class="form-floating mb-3">
           <VueField
-            id="username"
-            name="account"
+            id="name"
+            name="userName"
             label="姓名"
             type="username"
-            :class="['form-control', { 'is-invalid': errors['姓名'] }]"
+            :class="['form-control', { 'is-invalid': errors.userName }]"
             placeholder="請輸入 username"
             rules="required"
             v-model="user.name"
           ></VueField>
-          <label for="username-input">Name</label>
+          <label for="name-input">Name</label>
           <error-message
-            name="account"
+            name="userName"
             class="invalid-feedback"
           ></error-message>
         </div>
@@ -81,7 +81,7 @@
             name="tel"
             label="電話"
             type="tel"
-            :class="['form-control', { 'is-invalid': errors['電話'] }]"
+            :class="['form-control', { 'is-invalid': errors.tel }]"
             placeholder="請輸入 telphone"
             rules="min: 8|numeric|required"
             v-model="user.tel"
@@ -95,7 +95,7 @@
             name="address"
             label="地址"
             type="tel"
-            :class="['form-control', { 'is-invalid': errors['地址'] }]"
+            :class="['form-control', { 'is-invalid': errors.address }]"
             placeholder="請輸入 address"
             rules="min: 8|required"
             v-model="user.address"
@@ -107,15 +107,15 @@
           ></error-message>
         </div>
         <div class="form-floating mb-3">
-          <textarea
-            style="height: 100px"
-            id="message"
-            name="message"
-            type="text"
-            class="form-control"
-            placeholder="請輸入 message"
-            v-model="message"
-          ></textarea>
+          <VueField id="message" name="message">
+            <textarea
+              type="text"
+              :class="['form-control', { 'is-invalid': errors.message }]"
+              style="height: 100px"
+              v-model="message"
+              placeholder="請輸入 message"
+            ></textarea>
+          </VueField>
           <label for="message-input">Message</label>
           <error-message
             name="message"
@@ -174,7 +174,6 @@ export default {
             this.user = {};
             this.carts = [];
           });
-
       } else {
         alert("請選購商品後再結帳");
       }
