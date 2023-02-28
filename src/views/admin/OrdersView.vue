@@ -67,12 +67,6 @@
       </template>
     </tbody>
   </table>
-  <!-- <OrderModal
-    :order="tempOrder"
-    ref="orderModal"
-    @update-paid="updatePaid"
-  ></OrderModal>
-  <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal> -->
   <OrdersModal
     ref="orderTemp"
     :modal-for="modalFor"
